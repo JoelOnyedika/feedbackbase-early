@@ -1,101 +1,137 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Star, ThumbsUp, Zap, Code, PieChart, Pencil } from 'lucide-react';
+import Layout from '@/components/Layout';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ClipLoader } from 'react-spinners'; // Import a spinner from react-spinners
+// Zod schema for form validation
+const formSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  email: z.string().email('Invalid email address')
+});
+
+export default function LandingPage() {
+  const [status, setStatus] = useState({ message: '', isError: false });
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(formSchema)
+  });
+
+  const features = [
+    { icon: Star, title: 'Market Fit', description: 'Gather internal feedback at the most opportune times.' },
+    { icon: ThumbsUp, title: 'More Positive Reviews', description: 'Route happy users to leave 5-star reviews.' },
+    { icon: Zap, title: 'Enhanced with AI', description: 'Automatically surface actionable insights.' },
+    { icon: Code, title: '2-Line Integration', description: 'Easy setup with just 2 lines of code.' },
+    { icon: PieChart, title: 'Effortless Analytics', description: 'Set it on autopilot and watch results roll in.' },
+    { icon: Pencil, title: 'Fully Customizable', description: 'Edit any part of the survey, widget, and landing page.' },
+  ];
+
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    setStatus({ message: '', isError: false });
+    console.log(data);
+  
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        setStatus({message: `HTTP error! status: ${response.status}`, isError: true});
+      }
+  
+      const responseData = await response.json();
+  
+      if (responseData.userId) {
+        setStatus({ 
+          message: responseData.isNewUser ? 'Signed up successfully!' : 'Welcome back!', 
+          isError: false 
+        });
+        router.push(`/profile/${responseData.userId}`);
+      } else {
+        setStatus({message: 'User ID not found in response', isError: true});
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setStatus({ 
+        message: error.message || 'An unexpected error occurred', 
+        isError: true 
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Layout>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h1 className="text-5xl font-bold text-center mb-8">Get Early Access to Feedback Flow</h1>
+        <p className="text-xl text-center mb-12">Experience the future of customer feedback</p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              className="bg-gray-800 p-6 rounded-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <feature.icon className="w-12 h-12 text-purple-400 mb-4" />
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p>{feature.description}</p>
+            </motion.div>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        {status.message && (
+          <Alert variant={status.isError ? "destructive" : "default"} className="mb-4 text-white">
+            <AlertTitle className='text-white'>{status.isError ? "Error" : "Success"}</AlertTitle>
+            <AlertDescription className='text-white'>{status.message}</AlertDescription>
+          </Alert>
+        )}
+
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto">
+          <input
+            type="text"
+            {...register('username')}
+            placeholder="Username"
+            className="w-full p-2 mb-4 bg-gray-800 rounded"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          {errors.username && <p className="text-red-500">{errors.username.message}</p>}
+          
+          <input
+            type="email"
+            {...register('email')}
+            placeholder="Email"
+            className="w-full p-2 mb-4 bg-gray-800 rounded"
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full p-2 bg-purple-600 rounded font-bold flex justify-center items-center"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? <ClipLoader size={20} color="#ffffff" /> : 'Join Now & Get 40% Off'}
+          </motion.button>
+        </form>
+      </motion.div>
+    </Layout>
   );
 }
