@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
-import { ChevronRight, Mail, Star, Zap, Gift } from 'lucide-react';
+import { ChevronRight, Star, Zap, Gift } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Image from 'next/image'
 
 const NewsletterContent = () => (
   <div className="px-6 py-8 sm:p-10">
@@ -105,7 +106,7 @@ export default function ProfilePage() {
             <div className="sm:flex sm:items-center sm:justify-between">
               <div className="sm:flex sm:items-center sm:space-x-5">
                 <div className="flex-shrink-0">
-                  <img
+                  <Image
                     className="mx-auto h-24 w-24 rounded-full border-4 border-gray-800"
                     src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.username}`}
                     alt={user.username}
