@@ -157,7 +157,7 @@ export default function ProfilePage(): JSX.Element {
                 <Star className="h-4 w-4" />
                 <AlertTitle>Early Adopter Status</AlertTitle>
                 <AlertDescription>
-                  You're an early adopter! Enjoy exclusive benefits and updates <b>+ a 40% discount when Feedbackflow launches</b>
+                  You're an early adopter! Enjoy exclusive benefits and updates <b>+ a 40% discount when Feedbackbase launches</b>
                 </AlertDescription>
               </Alert>
             </div>
@@ -181,7 +181,7 @@ export default function ProfilePage(): JSX.Element {
             className="mt-8 bg-gray-800 shadow-xl rounded-lg overflow-hidden"
           >
             <div className="bg-gradient-to-r from-purple-700 to-indigo-800 px-6 py-8 sm:p-10">
-              <h2 className="text-3xl font-extrabold text-white">Feedback Flow Insider</h2>
+              <h2 className="text-3xl font-extrabold text-white">Feedback Base Insider</h2>
               <p className="mt-2 text-lg text-purple-100">Your exclusive newsletter for early adopters</p>
             </div>
             <NewsletterContent />

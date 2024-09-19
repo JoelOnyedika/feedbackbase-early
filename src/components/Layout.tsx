@@ -18,7 +18,7 @@ export default function Layout({ children }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Feedback Flow
+              Feedback Base
             </motion.span>
           </Link>
           <ul className="flex space-x-4">
@@ -42,7 +42,7 @@ export default function Layout({ children }) {
         {children}
       </main>
       <footer className="bg-gray-800 p-4 text-center">
-        <p>© 2024 Feedback Flow. All rights reserved.</p>
+        <p>© 2024 Feedback Base. All rights reserved.</p>
       </footer>
     </div>
   );

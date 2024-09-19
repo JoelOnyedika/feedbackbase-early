@@ -105,7 +105,7 @@ export default function LandingPage(): JSX.Element {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-5xl font-bold text-center mb-8">Get Early Access to Feedback Flow</h1>
+        <h1 className="text-5xl font-bold text-center mb-8">Get Early Access to Feedback Base</h1>
         <p className="text-xl text-center mb-12">Experience the future of customer feedback</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
