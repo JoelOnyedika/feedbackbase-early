@@ -38,7 +38,7 @@ export async function POST(req) {
     // Set a cookie with the user's ID
     const cookie = serialize('userId', userId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       maxAge: 60 * 60 * 24 * 7, // 1 week
       sameSite: 'strict',
       path: '/',
