@@ -4,15 +4,21 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 
-export default function EarlyAdoptersPage() {
-  const [earlyAdopters, setEarlyAdopters] = useState([]);
+interface EarlyAdopter {
+  _id: string;
+  username: string;
+  joinDate: string;
+}
+
+export default function EarlyAdoptersPage(): JSX.Element {
+  const [earlyAdopters, setEarlyAdopters] = useState<EarlyAdopter[]>([]);
 
   useEffect(() => {
-    const fetchEarlyAdopters = async () => {
+    const fetchEarlyAdopters = async (): Promise<void> => {
       try {
-        const response = await fetch('/api/adopters');
+        const response: Response = await fetch('/api/adopters');
         if (response.ok) {
-          const data = await response.json();
+          const data: EarlyAdopter[] = await response.json();
           setEarlyAdopters(data);
         } else {
           console.error('Failed to fetch early adopters');
@@ -21,7 +27,6 @@ export default function EarlyAdoptersPage() {
         console.error('Error fetching early adopters:', error);
       }
     };
-
     fetchEarlyAdopters();
   }, []);
 

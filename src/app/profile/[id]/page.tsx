@@ -51,36 +51,58 @@ const SocialLink = ({ href, text }) => (
   </a>
 );
 
-export default function ProfilePage() {
-  const [user, setUser] = useState(null);
-  const [showNewsletter, setShowNewsletter] = useState(true);
+interface User {
+  username: string;
+  email: string;
+}
+
+export default function ProfilePage(): JSX.Element {
+  const [user, setUser] = useState<User | null>(null);
+  const [showNewsletter, setShowNewsletter] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const params = useParams();
-  const { id } = params;
+  const id = params?.id as string;
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (): Promise<void> => {
       if (id) {
         try {
           const response = await fetch(`/api/users/${id}`);
           if (response.ok) {
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.indexOf("application/json") !== -1) {
-              const userData = await response.json();
+              const userData: User = await response.json();
               setUser(userData);
             } else {
               console.error('Response is not JSON:', await response.text());
+              setError('An unexpected error occurred. Please try again later.');
             }
           } else {
             console.error('Failed to fetch user data:', await response.text());
+            setError('Failed to load user data. Please try again later.');
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
+          setError('An error occurred while fetching user data. Please try again later.');
         }
       }
     };
   
     fetchUserData();
   }, [id]);
+
+  const toggleNewsletter = (): void => setShowNewsletter(!showNewsletter);
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900">
+        <Alert variant="destructive" className="bg-red-800 text-white">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -90,12 +112,10 @@ export default function ProfilePage() {
     );
   }
 
-  const toggleNewsletter = () => setShowNewsletter(!showNewsletter);
-
   return (
     <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-      <motion.div
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -110,6 +130,8 @@ export default function ProfilePage() {
                     className="mx-auto h-24 w-24 rounded-full border-4 border-gray-800"
                     src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.username}`}
                     alt={user.username}
+                    width={96}
+                    height={96}
                   />
                 </div>
                 <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">

@@ -9,23 +9,42 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClipLoader } from 'react-spinners'; // Import a spinner from react-spinners
-// Zod schema for form validation
+import { ClipLoader } from 'react-spinners';
+
 const formSchema = z.object({
   username: z.string().min(1, 'Username is required'),
   email: z.string().email('Invalid email address')
 });
 
-export default function LandingPage() {
-  const [status, setStatus] = useState({ message: '', isError: false });
-  const [isLoading, setIsLoading] = useState(false);
+type FormData = z.infer<typeof formSchema>;
+
+interface Feature {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+}
+
+interface Status {
+  message: string;
+  isError: boolean;
+}
+
+interface ApiResponse {
+  userId?: string;
+  isNewUser?: boolean;
+  error?: string;
+}
+
+export default function LandingPage(): JSX.Element {
+  const [status, setStatus] = useState<Status>({ message: '', isError: false });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema)
   });
 
-  const features = [
+  const features: Feature[] = [
     { icon: Star, title: 'Market Fit', description: 'Gather internal feedback at the most opportune times.' },
     { icon: ThumbsUp, title: 'More Positive Reviews', description: 'Route happy users to leave 5-star reviews.' },
     { icon: Zap, title: 'Enhanced with AI', description: 'Automatically surface actionable insights.' },
@@ -34,23 +53,27 @@ export default function LandingPage() {
     { icon: Pencil, title: 'Fully Customizable', description: 'Edit any part of the survey, widget, and landing page.' },
   ];
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: FormData): Promise<void> => {
     setIsLoading(true);
     setStatus({ message: '', isError: false });
     console.log(data);
   
     try {
-      const response = await fetch('/api/subscribe', {
+      const response: Response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
   
-      if (!response.ok) {
-        setStatus({message: `HTTP error! status: ${response.status}`, isError: true});
-      }
+      const responseData: ApiResponse = await response.json();
   
-      const responseData = await response.json();
+      if (!response.ok) {
+        setStatus({ 
+          message: responseData.error || `An error occurred. Please try again later.`, 
+          isError: true 
+        });
+        return;
+      }
   
       if (responseData.userId) {
         setStatus({ 
@@ -59,12 +82,15 @@ export default function LandingPage() {
         });
         router.push(`/profile/${responseData.userId}`);
       } else {
-        setStatus({message: 'User ID not found in response', isError: true});
+        setStatus({ 
+          message: 'An unexpected error occurred. Please try again later.', 
+          isError: true 
+        });
       }
     } catch (error) {
       console.error('Error:', error);
       setStatus({ 
-        message: error.message || 'An unexpected error occurred', 
+        message: 'An unexpected error occurred. Please try again later.', 
         isError: true 
       });
     } finally {
