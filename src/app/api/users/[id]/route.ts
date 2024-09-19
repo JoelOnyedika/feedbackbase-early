@@ -2,7 +2,7 @@
 import { MongoClient } from 'mongodb';
 import { NextResponse } from 'next/server';
 
-export async function GET(req) {
+export async function GET() {
   const url = new URL(req.url);
   const id = url.pathname.split('/').pop(); // Extract `id` from the URL
 
@@ -31,6 +31,6 @@ export async function GET(req) {
   }
 }
 
-export async function OPTIONS(req) {
+export async function OPTIONS() {
   return NextResponse.json({}, { status: 200 });
 }
