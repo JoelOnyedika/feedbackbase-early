@@ -29,9 +29,9 @@ const NewsletterContent = () => (
         Don't miss out on future updates! Make sure to whitelist our email address and follow us on social media.
       </p>
       <div className="mt-4 flex space-x-4">
-        <SocialLink href="#" text="Twitter" />
-        <SocialLink href="#" text="LinkedIn" />
-        <SocialLink href="#" text="Facebook" />
+        <SocialLink href="https://x.com/HighOctane0000?t=aW_ljiJHkg9SM8gUAgMFRg&s=09" text="Twitter" />
+        <SocialLink href="https://discord.com/invite/xwZ5WNek" text="Discord" />
+        <SocialLink href="https://www.facebook.com/profile.php?id=61565804831325&mibextid=ZbWKwL" text="Facebook" />
       </div>
     </div>
   </div>
@@ -120,7 +120,7 @@ export default function ProfilePage() {
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  href="https://discord.gg/your-invite-link"
+                  href="https://discord.com/invite/xwZ5WNek"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-700 hover:bg-purple-600"
