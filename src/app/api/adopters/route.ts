@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { NextResponse } from 'next/server';
 
-export async function GET(req) {
+export async function GET() {
   try {
       const client = await MongoClient.connect(process.env.MONGODB_URI);
       const db = client.db('feedbackflowteasers');
