@@ -2,7 +2,7 @@
 import { MongoClient } from 'mongodb';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: any) {
   const url = new URL(req.url);
   const id = url.pathname.split('/').pop(); // Extract `id` from the URL
 
