@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClipLoader } from 'react-spinners';
+import Image from 'next/image'
 
 const formSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -129,6 +130,57 @@ export default function LandingPage(): JSX.Element {
             <AlertDescription className='text-white'>{status.message}</AlertDescription>
           </Alert>
         )}
+
+<motion.div
+  className="mb-12"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, delay: 0.2 }}
+>
+  <h2 className="text-3xl font-bold text-center mb-8">See Screenshots of Our Products In Development</h2>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="relative aspect-video">
+      <Image 
+        src="/fb1.png" 
+        alt="Survey Builder" 
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        style={{ objectFit: 'cover' }}
+        className="rounded-lg shadow-lg"
+      />
+    </div>
+    <div className="relative aspect-video">
+      <Image 
+        src="/fb2.png" 
+        alt="Widget Customization" 
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        style={{ objectFit: 'cover' }}
+        className="rounded-lg shadow-lg"
+      />
+    </div>
+    <div className="relative aspect-video">
+      <Image 
+        src="/fb3.png" 
+        alt="Survey Questions" 
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        style={{ objectFit: 'cover' }}
+        className="rounded-lg shadow-lg"
+      />
+    </div>
+    <div className="relative aspect-video">
+      <Image 
+        src="/fb4.png" 
+        alt="Feedback Widget" 
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        style={{ objectFit: 'cover' }}
+        className="rounded-lg shadow-lg"
+      />
+    </div>
+  </div>
+</motion.div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto">
           <input
