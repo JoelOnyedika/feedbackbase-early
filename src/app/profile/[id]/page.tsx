@@ -33,6 +33,8 @@ const NewsletterContent = () => (
         <SocialLink href="https://x.com/HighOctane0000?t=aW_ljiJHkg9SM8gUAgMFRg&s=09" text="Twitter" />
         <SocialLink href="https://discord.com/invite/xwZ5WNek" text="Discord" />
         <SocialLink href="https://www.facebook.com/profile.php?id=61565804831325&mibextid=ZbWKwL" text="Facebook" />
+        <SocialLink href="https://www.linkedin.com/company/feedback-base/" text="LinkedIn" />
+      
       </div>
     </div>
   </div>
